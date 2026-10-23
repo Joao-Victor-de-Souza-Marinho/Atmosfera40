@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "registros")
-public class Registro {
+public class Registros {
 
-    public Registro() {
+    public Registros() {
     }
 
     @Id
@@ -20,7 +20,7 @@ public class Registro {
     @JoinColumn(name = "id_dispositivo_fk")
     private Dispositivos dispositivo;
 
-    @Column(name = "timestamp")
+    @Column(name = "time_stamp")
     private LocalDateTime timestamp;
 
     @Column(name = "data_hora")
