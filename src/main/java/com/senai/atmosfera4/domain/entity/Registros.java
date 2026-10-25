@@ -1,7 +1,10 @@
 package com.senai.atmosfera4.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,18 +14,32 @@ public class Registros {
     public Registros() {
     }
 
+    public Registros(Dispositivos dispositivo, Float temperatura, Float umidade, Float pressao, Float altitude, Float luminosidade, Float velocidadeVento, Integer direcaoVento, Integer intensidadeWifi) {
+        this.dispositivo = dispositivo;
+        this.timestamp = Timestamp.valueOf(LocalDateTime.now());
+        this.dataHora = LocalDateTime.now();
+        this.temperatura = temperatura;
+        this.umidade = umidade;
+        this.pressao = pressao;
+        this.altitude = altitude;
+        this.luminosidade = luminosidade;
+        this.velocidadeVento = velocidadeVento;
+        this.direcaoVento = direcaoVento;
+        this.intensidadeWifi = intensidadeWifi;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_registro")
-    private Long id;
-
+    private Integer id;
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_dispositivo_fk")
     private Dispositivos dispositivo;
-
+    @NotNull
     @Column(name = "time_stamp")
-    private LocalDateTime timestamp;
-
+    private Timestamp timestamp;
+    @NotNull
     @Column(name = "data_hora")
     private LocalDateTime dataHora;
 
@@ -51,7 +68,7 @@ public class Registros {
     private Integer intensidadeWifi;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -59,7 +76,7 @@ public class Registros {
         return dispositivo;
     }
 
-    public LocalDateTime getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
@@ -104,7 +121,7 @@ public class Registros {
         this.dispositivo = dispositivo;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 

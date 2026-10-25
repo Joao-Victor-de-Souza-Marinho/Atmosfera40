@@ -1,6 +1,7 @@
 package com.senai.atmosfera4.service;
 
 import com.senai.atmosfera4.domain.entity.Atuadores;
+import com.senai.atmosfera4.exception.RecursoNaoEncontradoException;
 import com.senai.atmosfera4.repository.AtuadoresRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,19 +25,20 @@ public class AtuadoresService {
     }
 
     public Atuadores listarPorId(Integer id) {
-        return atuadoresRepository.findById(id).orElseThrow();
+        return atuadoresRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Atuador não encontrado"));
     }
 
     public Atuadores atualizar(Integer id, Atuadores atuadores) {
         Atuadores atuadorSalvo = listarPorId(id);
 
-        atuadorSalvo.setNomeAtuador(atuadorSalvo.getNomeAtuador());
+        atuadorSalvo.setNomeAtuador(atuadores.getNomeAtuador());
         atuadorSalvo.setDispositivos(atuadores.getDispositivos());
 
         return criar(atuadorSalvo);
     }
 
     public void excluir(Integer id) {
+        listarPorId(id);
         atuadoresRepository.deleteById(id);
     }
 

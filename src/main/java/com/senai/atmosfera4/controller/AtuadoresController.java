@@ -2,6 +2,9 @@ package com.senai.atmosfera4.controller;
 
 import com.senai.atmosfera4.domain.entity.Atuadores;
 import com.senai.atmosfera4.service.AtuadoresService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,23 +29,20 @@ public class AtuadoresController {
     }
 
     @PostMapping
-    public Atuadores criar(@RequestBody Atuadores atuadores){
-        return atuadoresService.criar(atuadores);
+    public ResponseEntity<Atuadores> criar(@Valid @RequestBody Atuadores atuadores){
+        return ResponseEntity.status(HttpStatus.CREATED).body(atuadoresService.criar(atuadores));
     }
 
     @PutMapping("/{id}")
-    public Atuadores atualizar(@RequestBody Atuadores atuadores, @PathVariable Integer id){
-        Atuadores atuadorAtual = atuadoresService.listarPorId(id);
+    public Atuadores atualizar(@Valid @RequestBody Atuadores atuadores, @PathVariable Integer id){
 
-        atuadorAtual.setNomeAtuador(atuadores.getNomeAtuador());
-        atuadorAtual.setDispositivos(atuadores.getDispositivos());
-
-        return atuadoresService.criar(atuadorAtual);
+        return atuadoresService.atualizar(id,atuadores);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Integer id){
-        atuadoresService.excluir(id);
+       atuadoresService.excluir(id);
     }
 
 

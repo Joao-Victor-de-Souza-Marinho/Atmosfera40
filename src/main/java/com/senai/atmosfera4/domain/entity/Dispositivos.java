@@ -1,6 +1,7 @@
 package com.senai.atmosfera4.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "dispositivos")
@@ -10,10 +11,13 @@ public class Dispositivos {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_dispositivos")
     private Integer id;
+    @NotBlank
     @Column(name = "nome_dispositivo")
     private String nomeDispositivo;
+    @NotBlank
     @Column(name = "tipo_dispositivo")
     private String tipoDispositivo;
+    @Column(name = "localizacao")
     private String localizacao;
     @ManyToOne
     @JoinColumn(name = "gateway_pai_fk")

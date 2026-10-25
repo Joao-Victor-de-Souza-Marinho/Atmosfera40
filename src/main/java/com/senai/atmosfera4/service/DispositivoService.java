@@ -1,6 +1,7 @@
 package com.senai.atmosfera4.service;
 
 import com.senai.atmosfera4.domain.entity.Dispositivos;
+import com.senai.atmosfera4.exception.RecursoNaoEncontradoException;
 import com.senai.atmosfera4.repository.DispositivosRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +26,11 @@ public class DispositivoService {
     }
 
     public Dispositivos listarPorId(Integer id){
-        return dispositivosRepository.findById(id).orElseThrow();
+        return dispositivosRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Dispositivo com id " + id + " não foi encontrado"));
     }
 
     public void excluir(Integer id){
+        listarPorId(id);
         dispositivosRepository.deleteById(id);
     }
 

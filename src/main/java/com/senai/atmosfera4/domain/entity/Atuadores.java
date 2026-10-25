@@ -1,6 +1,8 @@
 package com.senai.atmosfera4.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -14,13 +16,15 @@ public class Atuadores {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_atuadores")
     private Integer id;
+    @NotBlank
     @Column(name = "nome_atuador")
     private String nomeAtuador;
+    @NotNull
     @Column(name = "status_atual")
     private boolean statusAtual;
     @Column(name = "ultimo_comando")
     private LocalDateTime ultimoComando;
-
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_dispositivo_fk")
     private Dispositivos dispositivo;

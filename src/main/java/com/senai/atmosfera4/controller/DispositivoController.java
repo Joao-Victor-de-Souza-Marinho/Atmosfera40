@@ -2,6 +2,9 @@ package com.senai.atmosfera4.controller;
 
 import com.senai.atmosfera4.domain.entity.Dispositivos;
 import com.senai.atmosfera4.service.DispositivoService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,24 +24,25 @@ public class DispositivoController {
        return dispositivoService.listarTodos();
     }
 
+    @GetMapping("/{id}")
+    public Dispositivos listarTodos(Integer id){
+        return dispositivoService.listarPorId(id);
+    }
+
     @PostMapping
-    public Dispositivos criar(@RequestBody Dispositivos dispositivo){
-       return dispositivoService.criar(dispositivo);
+    public ResponseEntity<Dispositivos> criar(@Valid @RequestBody Dispositivos dispositivo){
+       return ResponseEntity.status(HttpStatus.CREATED).body(dispositivoService.criar(dispositivo));
 
     }
 
     @PutMapping("/{id}")
-    public Dispositivos atualizar(@RequestBody Dispositivos dispositivos, @PathVariable Integer id){
-        Dispositivos dispositivoSalvo = dispositivoService.listarPorId(id);
+    public Dispositivos atualizar(@Valid @RequestBody Dispositivos dispositivos, @PathVariable Integer id){
 
-        dispositivoSalvo.setNomeDispositivo(dispositivos.getNomeDispositivo());
-        dispositivoSalvo.setTipoDispositivo(dispositivos.getTipoDispositivo());
-        dispositivoSalvo.setLocalizacao(dispositivos.getLocalizacao());
-        dispositivoSalvo.setGatewayPai(dispositivos.getGatewayPai());
-        return dispositivoService.criar(dispositivoSalvo);
+        return dispositivoService.atualizar(id,dispositivos);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Integer id){
         dispositivoService.excluir(id);
     }

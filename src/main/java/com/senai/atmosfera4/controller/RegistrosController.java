@@ -1,7 +1,12 @@
 package com.senai.atmosfera4.controller;
 
 import com.senai.atmosfera4.domain.entity.Registros;
+import com.senai.atmosfera4.dto.RegistroRequestDTO;
+import com.senai.atmosfera4.dto.RegistroResponseDTO;
 import com.senai.atmosfera4.service.RegistrosService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,25 +27,35 @@ public class RegistrosController {
     }
 
     @GetMapping("/{id}")
-    public Registros listarPorId(@PathVariable Long id) {
+    public Registros listarPorId(@PathVariable @Valid Integer id) {
         return registrosService.listarPorId(id);
     }
 
     @PostMapping
-    public Registros criar(@RequestBody Registros registro) {
-        return registrosService.criar(registro);
-    }
-
-    @PutMapping("/{id}")
-    public Registros atualizar(
-            @PathVariable Long id,
-            @RequestBody Registros registro) {
-
-        return registrosService.atualizar(id, registro);
+    public ResponseEntity<RegistroResponseDTO> criar(@Valid @RequestBody RegistroRequestDTO registro) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(registrosService.criar(registro));
     }
 
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Integer id) {
         registrosService.excluir(id);
     }
+
+    @GetMapping("/ultimo")
+    public RegistroResponseDTO listarUltimo(){
+        return registrosService.listarUltimoRegistro();
+    }
+
+    @GetMapping("/dispositivo/{id}/ultimo")
+    public RegistroResponseDTO listarUltimoPorId(@PathVariable Integer id){
+        return registrosService.listarUltimoRegistroPorDispositivo(id);
+    }
+
+    @GetMapping("/dispositivo/{id}/historico")
+    public List<RegistroResponseDTO> listarRegistrosPorIdDispositivo(@PathVariable Integer id){
+        return registrosService.listarTodosOsRegistrosPorId(id);
+    }
+
+
 }
