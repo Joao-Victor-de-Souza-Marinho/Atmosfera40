@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,15 +29,38 @@
                 <p>Monitoramento dos Dispositivos</p>
             </header>
 
-            
+            <section class="painel" id="dispositivos">
+                <h2>Estado dos dispositivos</h2>
+
+                <p>Dispositivos cadastrados no sistema.</p>
+
+                <div class="dispositivo titulo-tabela">
+                    <span>Dispositivo</span>
+                    <span>Localização</span>
+                    <span>Sinal Wi-fi</span>
+                    <span>Altitude</span>
+                    <span>Estado</span>
+                </div>
+
+                <div id="listaDispositivos">
+                    <div class="dispositivo">
+                        <span>Carregando ...</span>
+                        <span>--</span>
+                        <span>--</span>
+                        <span>--</span>
+                        <span>--</span>
+                    </div>
+                </div>
+            </section>
 
             <footer>
                 Atmosfera 4.0 - Simulador ambiental
             </footer>
+
         </main>
 
     </div>
 
+    <script src="dispositivos.js"></script>
 </body>
-
 </html>

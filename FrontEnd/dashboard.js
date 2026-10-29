@@ -1,25 +1,29 @@
-
 const API_URL = "http://localhost:8080";
-const ID_DISPOSITIVO = 1;
-const canvasGrafico1 = document.getElementById('grafico1').getContext('2d');
+let idDispositivoSelecionado = 1;
 
-// Gráfico
-let grafico1 = new Chart(canvasGrafico1, {
-    type: 'line',
-    data: {
-        labels: [],
-        datasets: [
-            { label: 'Temperatura (°C)', data: [], borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', fill: true, tension: 0.3 },
-            { label: 'Umidade (%)', data: [], borderColor: '#4ade80', backgroundColor: 'rgba(74, 222, 128, 0.1)', fill: true, tension: 0.3 }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: '#748078' } } },
-        scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }
-    }
-});
+// Inicializa o gráfico
+const elementoCanvas = document.getElementById('grafico1');
+let grafico1 = null;
+
+if (elementoCanvas) {
+    const canvasGrafico1 = elementoCanvas.getContext('2d');
+    grafico1 = new Chart(canvasGrafico1, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                { label: 'Temperatura (°C)', data: [], borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', fill: true, tension: 0.3 },
+                { label: 'Umidade (%)', data: [], borderColor: '#4ade80', backgroundColor: 'rgba(74, 222, 128, 0.1)', fill: true, tension: 0.3 }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#748078' } } },
+            scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }
+        }
+    });
+}
 
 // Atualiza os indicadores
 async function carregarIndicadores() {
@@ -29,32 +33,27 @@ async function carregarIndicadores() {
 
         const dados = await resposta.json();
 
-        document.getElementById("temperatura").textContent =
-            dados.temperatura + " °C";
+        const elTemp = document.getElementById("temperatura");
+        const elUmid = document.getElementById("umidade");
+        const elPress = document.getElementById("pressao");
+        const elLumi = document.getElementById("luminosidade");
 
-        document.getElementById("umidade").textContent =
-            dados.umidade + " %";
-
-        document.getElementById("pressao").textContent =
-            dados.pressao + " hPa";
-
-        document.getElementById("luminosidade").textContent =
-            dados.luminosidade + " lux";
+        if (elTemp) elTemp.textContent = `${dados.temperatura ?? '--'} °C`;
+        if (elUmid) elUmid.textContent = `${dados.umidade ?? '--'} %`;
+        if (elPress) elPress.textContent = `${dados.pressao ?? '--'} hPa`;
+        if (elLumi) elLumi.textContent = `${dados.luminosidade ?? '--'} lux`;
 
     } catch (erro) {
-        console.log("Erro ao carregar indicadores:", erro);
+        console.error("Erro ao carregar indicadores:", erro);
     }
 }
 
-// Mostra o histórico das últimas 24 horas
+// Mostra o histórico das últimas 24 horas no gráfico
 async function carregarHistorico() {
-    const elementoStatus = document.getElementById('statusSimulação') || document.body;
+    if (!grafico1) return;
 
     try {
-        const resposta = await fetch(
-            `${API_URL}/registros/dispositivo/${ID_DISPOSITIVO}/historico`
-        );
-
+        const resposta = await fetch(`${API_URL}/registros/dispositivo/${idDispositivoSelecionado}/historico`);
         if (!resposta.ok) throw new Error("Erro ao buscar histórico");
 
         const registros = await resposta.json();
@@ -65,71 +64,34 @@ async function carregarHistorico() {
                 const data = new Date(registro.dataHora).getTime();
                 return data >= ontem && data <= Date.now();
             })
-            .sort((a, b) =>
-                new Date(a.dataHora) - new Date(b.dataHora)
-            )
+            .sort((a, b) => new Date(a.dataHora) - new Date(b.dataHora))
             .slice(-20);
 
         if (recentes.length === 0) {
-            grafico.textContent =
-                "Ainda não há medições nas últimas 24 horas.";
+            grafico1.data.labels = [];
+            grafico1.data.datasets[0].data = [];
+            grafico1.data.datasets[1].data = [];
+            grafico1.update();
             return;
         }
 
-        const labels = recentes.map(r => new Date(r.dataHora).toLocaleTimeString("pt-BR"));
-        const dadosTemperatura = recentes.map(r => r.temperatura);
-        const dadosUmidade = recentes.map(r => r.umidade);
-
-        grafico1.data.labels = labels;
-        grafico1.data.datasets[0].data = dadosTemperatura;
-        grafico1.data.datasets[1].data = dadosUmidade;
+        grafico1.data.labels = recentes.map(r => new Date(r.dataHora).toLocaleTimeString("pt-BR"));
+        grafico1.data.datasets[0].data = recentes.map(r => r.temperatura);
+        grafico1.data.datasets[1].data = recentes.map(r => r.umidade);
         grafico1.update();
 
     } catch (erro) {
-        console.log("Erro ao carregar histórico:", erro);
-        grafico.textContent = "Não foi possível carregar o histórico.";
+        console.error("Erro ao carregar histórico:", erro);
     }
 }
 
-// Lista os dispositivos cadastrados no banco
-async function carregarDispositivos() {
-    const lista = document.getElementById("listaDispositivos");
-
-    try {
-        const resposta = await fetch(`${API_URL}/dispositivos`);
-        if (!resposta.ok) throw new Error("Erro ao buscar dispositivos");
-
-        const dispositivos = await resposta.json();
-
-        if (dispositivos.length === 0) {
-            lista.textContent = "Nenhum dispositivo cadastrado.";
-            return;
-        }
-
-        lista.innerHTML = dispositivos.map(dispositivo => `
-            <div class="dispositivo">
-                <span>${dispositivo.nomeDispositivo}</span>
-                <span>${dispositivo.localizacao || "--"}</span>
-                <span>Cadastrado</span>
-            </div>
-        `).join("");
-
-    } catch (erro) {
-        console.log("Erro ao carregar dispositivos:", erro);
-        lista.textContent = "Não foi possível carregar os dispositivos.";
-    }
-}
-
-// Executa ao abrir a página
 function atualizarDashboard() {
     carregarIndicadores();
     carregarHistorico();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    atualizarDashboard();
-    carregarDispositivos();
+    atualizarDashboard();;
 
-    // Atualiza indicadores e histórico a cada 5 segundos
     setInterval(atualizarDashboard, 5000);
 });
