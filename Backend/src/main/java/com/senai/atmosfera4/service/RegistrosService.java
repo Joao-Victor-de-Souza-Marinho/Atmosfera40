@@ -57,7 +57,7 @@ public class RegistrosService {
         List<RegistroResponseDTO> registrosDTO = new ArrayList<>();
 
         for (Registros registro:registros){
-               registrosDTO.add(new RegistroResponseDTO(registro));
+            registrosDTO.add(new RegistroResponseDTO(registro));
         }
         return registrosDTO;
     }

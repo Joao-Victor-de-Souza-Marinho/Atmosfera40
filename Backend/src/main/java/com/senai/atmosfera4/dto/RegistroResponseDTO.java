@@ -54,5 +54,51 @@ public class RegistroResponseDTO {
         this.velocidadeVento = registros.getVelocidadeVento();
     }
 
+    public Integer getId() {
+        return id;
+    }
 
+    public Integer getIdDispositivo() {
+        return idDispositivo;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public LocalDateTime getDataHora() {
+        return dataHora;
+    }
+
+    public Float getTemperatura() {
+        return temperatura;
+    }
+
+    public Float getUmidade() {
+        return umidade;
+    }
+
+    public Float getPressao() {
+        return pressao;
+    }
+
+    public Float getAltitude() {
+        return altitude;
+    }
+
+    public Float getLuminosidade() {
+        return luminosidade;
+    }
+
+    public Float getVelocidadeVento() {
+        return velocidadeVento;
+    }
+
+    public Integer getDirecaoVento() {
+        return direcaoVento;
+    }
+
+    public Integer getIntensidadeWifi() {
+        return intensidadeWifi;
+    }
 }
