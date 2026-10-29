@@ -22,7 +22,7 @@ O sistema é dividido em **front-end**, **back-end** e **banco de dados**, permi
 - [ScriptBanco](ScriptBanco/)  
   Script para criação do banco de dados MySQL.
 
-- [BackEnd](Backend/)  
+- [Backend](Backend/)  
   API REST desenvolvida em Java com Spring Boot, responsável pelas regras da aplicação e comunicação com o banco de dados.
 
 ## Tecnologias utilizadas
