@@ -19,6 +19,9 @@ O sistema é dividido em **front-end**, **back-end** e **banco de dados**, permi
 - [FrontEnd](FrontEnd/)  
   Interface web responsável pela visualização das informações e pela simulação de medições.
 
+- [ScriptBanco](ScriptBanco/)  
+  Script para criação do banco de dados MySQL.
+
 - [BackEnd](BackEnd/)  
   API REST desenvolvida em Java com Spring Boot, responsável pelas regras da aplicação e comunicação com o banco de dados.
 
