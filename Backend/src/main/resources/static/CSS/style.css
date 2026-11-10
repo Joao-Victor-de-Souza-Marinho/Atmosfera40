@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
 }
@@ -22,6 +21,9 @@ body {
     padding: 25px 18px;
     background-color: #123d2c;
     color: white;
+    transition: width 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .menu h2 {
@@ -113,22 +115,7 @@ header p {
     font-size: 18px;
 }
 
-
-   /* Histórico de medições */
-#grafico1 {
-    display: block;
-    height: 185px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-sizing: border-box;
-    margin-top: 15px;
-    padding: 10px;
-    border: 1px dashed #b8c9be;
-    background-color: #f8faf8;
-    color: #748078;
-    font-size: 13px;
-}
-
+/* Container do Gráfico */
 .grid-grafico {
     position: relative;
     width: 100%;
@@ -136,6 +123,12 @@ header p {
     max-height: 400px;
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+/* Componente do Gráfico */
+#grafico1 {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 /* Botões iniciar/parar */
@@ -146,6 +139,8 @@ header p {
     border-radius: 6px;
     background-color: #006400;
     color: #fff;
+    border: none;
+    font-weight: bold;
 }
 
 #botaoParar {
@@ -155,6 +150,8 @@ header p {
     border-radius: 6px;
     background-color: #950606;
     color: #fff;
+    border: none;
+    font-weight: bold;
 }
 
 #botaoIniciar:hover {
@@ -167,14 +164,25 @@ header p {
     transition: 0.2s;
 }
 
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background-color: #e9efeb;
+    color: #176044;
+    font-weight: bold;
+    width: fit-content;
+}
+
 /* Lista de dispositivos */
 .dispositivo {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
     padding: 12px 0;
     border-bottom: 1px solid #e9efeb;
     font-size: 13px;
+    align-items: center;
 }
 
 .titulo-tabela {
@@ -233,4 +241,89 @@ footer {
         grid-template-columns: 1fr;
         gap: 5px;
     }
+}
+
+/* Novos componentes da tabela */
+.tabelas-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.tabela-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #e9efeb;
+}
+
+th {
+    color: #52635a;
+}
+
+select {
+    margin: 8px;
+    padding: 7px;
+    border: 1px solid #dfe7e1;
+    border-radius: 5px;
+}
+
+#bussola {
+    width: 140px;
+    height: 140px;
+    border: 3px solid #176044;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+}
+
+#agulhaBussola {
+    font-size: 55px;
+    color: #176044;
+    display: inline-block;
+    transition: transform 0.4s ease;
+}
+
+@media (max-width: 900px) {
+    .tabelas-dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Menu lateral recolhido */
+.menu.recolhido {
+    width: 60px;
+    padding: 25px 12px;
+}
+
+.menu.recolhido .menu-conteudo {
+    display: none;
+}
+
+/* Botão de recolher menu */
+.btn-toggle {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.btn-toggle:hover {
+    opacity: 0.7;
 }

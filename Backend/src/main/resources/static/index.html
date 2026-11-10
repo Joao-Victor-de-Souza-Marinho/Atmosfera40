@@ -6,22 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atmosfera 4.0</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="/CSS/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <div class="layout">
 
-        <aside class="menu">
-            <h2>Atmosfera 4.0</h2>
-            <p>Monitoramento ambiental</p>
+        <aside class="menu" id="menuLateral">
 
-            <nav>
-                <a href="index.html">Visão geral</a>
-                <a href="dispositivos.html">Dispositivos</a>
-                <a href="simulador.html">Simulador</a>
-            </nav>
+            <button type="button" id="btnToggle" class="btn-toggle">
+                ☰
+            </button>
+
+            <div class="menu-conteudo">
+                <h2>Atmosfera 4.0</h2>
+                <p>Monitoramento ambiental</p>
+
+                <nav>
+                    <a href="index.html">Visão geral</a>
+                    <a href="dispositivos.html">Dispositivos</a>
+                    <a href="simulador.html">Simulador</a>
+                </nav>
+            </div>
         </aside>
 
         <main id="inicio">
@@ -48,20 +55,42 @@
                 <div class="card">
                     <h3>Pressão</h3>
                     <p class="valor" id="pressao">---- hPa</p>
-                    <p>Aguardando medição</p>
+                    <p>Faixa ideal: 1000 a 1025 hPa</p>
                 </div>
 
                 <div class="card">
                     <h3>Luminosidade</h3>
                     <p class="valor" id="luminosidade">--- lux</p>
-                    <p>Aguardando medição</p>
+                    <p>Faixa ideal: 100 a 900 lux</p>
                 </div>
 
             </section>
+            <!-- Filtros do histórico -->
+            <section class="painel">
+                <h2>Filtros do histórico</h2>
+
+                <label for="filtroPeriodo">Período:</label>
+                <select id="filtroPeriodo">
+                    <option value="hora">Última hora</option>
+                    <option value="24h" selected>Últimas 24 horas</option>
+                    <option value="todos">Todo o histórico</option>
+                </select>
+
+                <label for="filtroDispositivo">Dispositivo:</label>
+                <select id="filtroDispositivo">
+                    <option value="">Todos</option>
+                </select>
+
+                <label for="filtroLocalizacao">Localização:</label>
+                <select id="filtroLocalizacao">
+                    <option value="">Todas</option>
+                </select>
+            </section>
+
 
             <section class="painel">
                 <h2>Condições ao longo do dia</h2>
-                
+
                 <div class="grid-grafico">
                     <span>Gráfico de medições</span>
                     <canvas id="grafico1"></canvas>
@@ -69,25 +98,21 @@
             </section>
 
 
-
-            <section class="painel" id="dispositivos">
-                <h2>Estado dos dispositivos</h2>
-
-                <p>Dispositivos cadastrados no sistema.</p>
-
-                <div class="dispositivo titulo-tabela">
-                    <span>Dispositivo</span>
-                    <span>Localização</span>
-                    <span>Estado</span>
+            <!-- Luminosidade -->
+            <section class="painel">
+                <h2>Luminosidade por localização</h2>
+                <div class="grid-grafico">
+                    <canvas id="graficoLuminosidade"></canvas>
                 </div>
+            </section>
 
-                <div id="listaDispositivos">
-                    <div class="dispositivo">
-                        <span>Carregando ...</span>
-                        <span>--</span>
-                        <span>--</span>
-                    </div>
+            <!-- Bússola -->
+            <section class="painel">
+                <h2>Direção do vento</h2>
+                <div id="bussola">
+                    <div id="agulhaBussola">↑</div>
                 </div>
+                <p id="direcaoVento">Aguardando medição</p>
             </section>
 
             <footer>
@@ -96,7 +121,8 @@
 
         </main>
     </div>
-    <script src="/JS/dashboard.js"></script>
+    <script src="menu.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 
 </html>

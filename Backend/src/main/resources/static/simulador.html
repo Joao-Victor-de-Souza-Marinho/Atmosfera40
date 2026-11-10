@@ -1,25 +1,33 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador - Atmosfera 4.0</title>
-    <link rel="stylesheet" href="/CSS/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <div class="layout">
 
-        <aside class="menu">
-            <h2>Atmosfera 4.0</h2>
-            <p>Simulação de sensores ambientais</p>
+        <aside class="menu" id="menuLateral">
 
-            <nav>
-                <a href="index.html">Visão geral</a>
-                <a href="dispositivos.html">Dispositivos</a>
-                <a href="simulador.html">Simulador</a>
-            </nav>
+            <button type="button" id="btnToggle" class="btn-toggle">
+                ☰
+            </button>
+
+            <div class="menu-conteudo">
+                <h2>Atmosfera 4.0</h2>
+                <p>Simulação de sensores ambientais</p>
+
+                <nav>
+                    <a href="index.html">Visão geral</a>
+                    <a href="dispositivos.html">Dispositivos</a>
+                    <a href="simulador.html">Simulador</a>
+                </nav>
+            </div>
         </aside>
 
         <main>
@@ -31,8 +39,8 @@
             <section class="painel">
                 <h2>Controle da simulação</h2>
 
-                <p>
-                    Dispositivo: Sensor Sala 1 (ID 1)
+                <p id="listaDispositivos">
+                    Carregando dispositivos...
                 </p>
 
                 <p id="statusSimulacao" role="status">
@@ -84,6 +92,8 @@
 
     </div>
 
-    <script src="/JS/simulador.js"></script>
+    <script src="menu.js"></script>
+    <script src="simulador.js"></script>
 </body>
+
 </html>

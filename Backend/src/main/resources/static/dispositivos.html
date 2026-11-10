@@ -5,22 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dispositivos - Atmosfera 4.0</title>
-    <link rel="stylesheet" href="/CSS/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <div class="layout">
 
-        <aside class="menu">
-            <h2>Atmosfera 4.0</h2>
-            <p>Monitoramento de Dispositivos</p>
+        <aside class="menu" id="menuLateral">
 
-            <nav>
-                <a href="index.html">Visão geral</a>
-                <a href="dispositivos.html">Dispositivos</a>
-                <a href="simulador.html">Simulador</a>
-            </nav>
+            <button type="button" id="btnToggle" class="btn-toggle" title="Recolher menu">
+                ☰
+            </button>
+
+            <div class="menu-conteudo">
+                <h2>Atmosfera 4.0</h2>
+                <p>Monitoramento de Dispositivos</p>
+
+                <nav>
+                    <a href="index.html">Visão geral</a>
+                    <a href="dispositivos.html">Dispositivos</a>
+                    <a href="simulador.html">Simulador</a>
+                </nav>
+            </div>
         </aside>
 
         <main>
@@ -30,15 +37,90 @@
                 <p>Monitoramento dos Dispositivos</p>
             </header>
 
-            
+            <section class="painel" id="dispositivos">
+                <h2>Estado dos dispositivos</h2>
 
+                <p>Dispositivos cadastrados no sistema.</p>
+
+                <div class="dispositivo titulo-tabela">
+                    <span>Dispositivo</span>
+                    <span>Localização</span>
+                    <span>Sinal Wi-fi</span>
+                    <span>Altitude</span>
+                    <span>Estado</span>
+                </div>
+
+                <div id="listaDispositivos">
+                    <div class="dispositivo">
+                        <span>Carregando ...</span>
+                        <span>--</span>
+                        <span>--</span>
+                        <span>--</span>
+                        <span>--</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tabelas-dashboard">
+
+                <div class="painel">
+                    <h2>Dispositivos (<span id="totalDispositivos">0</span>)</h2>
+
+                    <div class="tabela-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Local</th>
+                                    <th>Temperatura</th>
+                                    <th>Wi-Fi</th>
+                                    <th>Último registro</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaDispositivos">
+                                <tr>
+                                    <td colspan="6">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="painel">
+                    <h2>Atuadores (<span id="totalAtuadores">0</span>)</h2>
+
+                    <div class="tabela-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Dispositivo</th>
+                                    <th>Status</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaAtuadores">
+                                <tr>
+                                    <td colspan="5">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
             <footer>
                 Atmosfera 4.0 - Simulador ambiental
             </footer>
+
         </main>
 
     </div>
 
+    <script src="menu.js"></script>
+    <script src="dispositivos.js"></script>
 </body>
 
 </html>
