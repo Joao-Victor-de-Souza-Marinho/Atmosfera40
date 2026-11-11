@@ -7,6 +7,7 @@ import com.senai.atmosfera4.dto.RegistroResponseDTO;
 import com.senai.atmosfera4.exception.RecursoNaoEncontradoException;
 import com.senai.atmosfera4.repository.RegistrosRepository;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,4 +62,64 @@ public class RegistrosService {
         }
         return registrosDTO;
     }
+
+    public List<RegistroResponseDTO> listarHistoricoGeral() {
+
+        List<Registros> registros =
+                registrosRepository.findAllByOrderByDataHoraDesc();
+
+        List<RegistroResponseDTO> registrosDTO = new ArrayList<>();
+
+        for (Registros registro : registros) {
+            registrosDTO.add(new RegistroResponseDTO(registro));
+        }
+
+        return registrosDTO;
+    }
+    public List<RegistroResponseDTO> buscarHistoricoFiltrado(
+            String periodo,
+            Integer idDispositivo,
+            String localizacao
+    ) {
+        LocalDateTime inicio;
+
+        switch (periodo.toLowerCase()) {
+            case "hora":
+                inicio = LocalDateTime.now().minusHours(1);
+                break;
+
+            case "24h":
+                inicio = LocalDateTime.now().minusHours(24);
+                break;
+
+            case "todos":
+                inicio = LocalDateTime.of(1970, 1, 1, 0, 0);
+                break;
+
+            default:
+                throw new IllegalArgumentException(
+                        "Período inválido. Use hora, 24h ou todos."
+                );
+        }
+
+        if (localizacao != null && localizacao.isBlank()) {
+            localizacao = null;
+        }
+
+        List<Registros> registros =
+                registrosRepository.buscarHistoricoFiltrado(
+                        inicio,
+                        idDispositivo,
+                        localizacao
+                );
+
+        List<RegistroResponseDTO> resposta = new ArrayList<>();
+
+        for (Registros registro : registros) {
+            resposta.add(new RegistroResponseDTO(registro));
+        }
+
+        return resposta;
+    }
+
 }

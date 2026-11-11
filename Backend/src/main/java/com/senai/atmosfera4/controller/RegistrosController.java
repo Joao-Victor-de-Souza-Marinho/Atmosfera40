@@ -57,5 +57,23 @@ public class RegistrosController {
         return registrosService.listarTodosOsRegistrosPorId(id);
     }
 
+    @GetMapping("/historico")
+    public List<RegistroResponseDTO> listarHistoricoGeral() {
+        return registrosService.listarHistoricoGeral();
+    }
+
+    @GetMapping("/historico/filtrar")
+    public List<RegistroResponseDTO> buscarHistoricoFiltrado(
+            @RequestParam(defaultValue = "24h") String periodo,
+            @RequestParam(required = false) Integer dispositivoId,
+            @RequestParam(required = false) String localizacao
+    ) {
+        return registrosService.buscarHistoricoFiltrado(
+                periodo,
+                dispositivoId,
+                localizacao
+        );
+    }
+
 
 }

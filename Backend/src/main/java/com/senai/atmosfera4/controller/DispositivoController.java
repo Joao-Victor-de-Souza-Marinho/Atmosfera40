@@ -21,17 +21,17 @@ public class DispositivoController {
     }
     @GetMapping
     public List<Dispositivos> listarTodos(){
-       return dispositivoService.listarTodos();
+        return dispositivoService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Dispositivos listarTodos(Integer id){
+    public Dispositivos listarPorId(@PathVariable Integer id) {
         return dispositivoService.listarPorId(id);
     }
 
     @PostMapping
     public ResponseEntity<Dispositivos> criar(@Valid @RequestBody Dispositivos dispositivo){
-       return ResponseEntity.status(HttpStatus.CREATED).body(dispositivoService.criar(dispositivo));
+        return ResponseEntity.status(HttpStatus.CREATED).body(dispositivoService.criar(dispositivo));
 
     }
 

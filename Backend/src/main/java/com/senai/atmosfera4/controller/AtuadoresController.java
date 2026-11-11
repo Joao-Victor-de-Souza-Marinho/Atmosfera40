@@ -42,7 +42,15 @@ public class AtuadoresController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Integer id){
-       atuadoresService.excluir(id);
+        atuadoresService.excluir(id);
+    }
+
+    @PutMapping("/{id}/status")
+    public Atuadores alterarStatus(
+            @PathVariable Integer id,
+            @RequestParam boolean ativo
+    ) {
+        return atuadoresService.alterarStatus(id, ativo);
     }
 
 

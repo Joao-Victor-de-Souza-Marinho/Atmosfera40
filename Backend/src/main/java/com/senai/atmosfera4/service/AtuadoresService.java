@@ -33,10 +33,18 @@ public class AtuadoresService {
 
         atuadorSalvo.setNomeAtuador(atuadores.getNomeAtuador());
         atuadorSalvo.setDispositivos(atuadores.getDispositivos());
+        atuadorSalvo.setStatusAtual(atuadores.getStatusAtual());
 
-        return criar(atuadorSalvo);
+        return atuadoresRepository.save(atuadorSalvo);
     }
+    public Atuadores alterarStatus(Integer id, boolean ativo) {
+        Atuadores atuador = listarPorId(id);
 
+        atuador.setStatusAtual(ativo);
+        atuador.setUltimoComando(java.time.LocalDateTime.now());
+
+        return atuadoresRepository.save(atuador);
+    }
     public void excluir(Integer id) {
         listarPorId(id);
         atuadoresRepository.deleteById(id);
