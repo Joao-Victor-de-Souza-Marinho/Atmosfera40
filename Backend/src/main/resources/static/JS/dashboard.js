@@ -1,4 +1,3 @@
-
 const API_URL = "http://localhost:8080";
 
 // Inicializa o gráfico
@@ -85,27 +84,109 @@ if (canvasLuminosidade) {
     });
 }
 
-// Atualiza os indicadores
+
+// Atualiza os indicadores com a média dos dispositivos
 async function carregarIndicadores() {
+
     try {
-        const resposta = await fetch(`${API_URL}/registros/ultimo`);
-        if (!resposta.ok) return;
 
-        const dados = await resposta.json();
+        // Busca todos os dispositivos cadastrados
+        const respostaDispositivos = await fetch(`${API_URL}/dispositivos`);
 
+        if (!respostaDispositivos.ok) {
+            throw new Error("Erro ao buscar dispositivos.");
+        }
+
+        const dispositivos = await respostaDispositivos.json();
+
+        // Busca a última medição de cada dispositivo
+        const resultados = await Promise.all(
+
+            dispositivos.map(async (dispositivo) => {
+
+                try {
+
+                    const resposta = await fetch(
+                        `${API_URL}/registros/dispositivo/${dispositivo.id}/ultimo`
+                    );
+
+                    if (!resposta.ok) return null;
+
+                    return await resposta.json();
+
+                } catch (erro) {
+
+                    // Se um dispositivo não possuir medição, ignora ele
+                    return null;
+
+                }
+
+            })
+
+        );
+
+        // Remove dispositivos sem registros
+        const registros = resultados.filter(registro => registro !== null);
+
+        // Calcula a média de um determinado indicador
+        function calcularMedia(indicador) {
+
+            const valores = registros
+                .map(registro => Number(registro[indicador]))
+                .filter(valor => Number.isFinite(valor));
+
+            if (valores.length === 0) {
+                return null;
+            }
+
+            const soma = valores.reduce((total, valor) => total + valor, 0);
+
+            return soma / valores.length;
+        }
+
+        // Calcula as médias
+        const mediaTemperatura = calcularMedia("temperatura");
+        const mediaUmidade = calcularMedia("umidade");
+        const mediaPressao = calcularMedia("pressao");
+        const mediaLuminosidade = calcularMedia("luminosidade");
+
+        // Busca os elementos dos cards
         const elTemp = document.getElementById("temperatura");
         const elUmid = document.getElementById("umidade");
         const elPress = document.getElementById("pressao");
         const elLumi = document.getElementById("luminosidade");
 
-        if (elTemp) elTemp.textContent = `${dados.temperatura ?? '--'} °C`;
-        if (elUmid) elUmid.textContent = `${dados.umidade ?? '--'} %`;
-        if (elPress) elPress.textContent = `${dados.pressao ?? '--'} hPa`;
-        if (elLumi) elLumi.textContent = `${dados.luminosidade ?? '--'} lux`;
+        // Atualiza os cards
+        if (elTemp) {
+            elTemp.textContent = mediaTemperatura !== null
+                ? `${mediaTemperatura.toFixed(1)} °C`
+                : "-- °C";
+        }
+
+        if (elUmid) {
+            elUmid.textContent = mediaUmidade !== null
+                ? `${mediaUmidade.toFixed(1)} %`
+                : "-- %";
+        }
+
+        if (elPress) {
+            elPress.textContent = mediaPressao !== null
+                ? `${mediaPressao.toFixed(1)} hPa`
+                : "-- hPa";
+        }
+
+        if (elLumi) {
+            elLumi.textContent = mediaLuminosidade !== null
+                ? `${mediaLuminosidade.toFixed(1)} lux`
+                : "-- lux";
+        }
 
     } catch (erro) {
-        console.error("Erro ao carregar indicadores:", erro);
+
+        console.error("Erro ao calcular média dos indicadores:", erro);
+
     }
+
 }
 
 async function carregarOpcoesFiltros() {
@@ -370,10 +451,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         .addEventListener("change", carregarHistorico);
 
     document.getElementById("filtroDispositivo")
-    .addEventListener("change", () => {
-        carregarHistorico();
-        carregarBussola();
-    });
+        .addEventListener("change", () => {
+            carregarHistorico();
+            carregarBussola();
+        });
 
     document.getElementById("filtroLocalizacao")
         .addEventListener("change", carregarHistorico);
